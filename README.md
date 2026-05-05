@@ -36,9 +36,30 @@ rustup update
 
 ### Recommended editor setup
 
+Install the language server (LSP) and lints as rustup components so they're tied to your active toolchain:
+
+```bash
+rustup component add rust-analyzer    # LSP — needed by VS Code, Neovim, etc.
+rustup component add clippy           # extra lints, run via `cargo clippy`
+rustup component add rustfmt          # formatter, run via `cargo fmt` (usually pre-installed)
+```
+
 - **VS Code:** install the `rust-analyzer` extension (NOT the older "Rust" one).
-- Format on save with `rustfmt` (bundled with rustup).
-- Lints via `clippy`: `rustup component add clippy`, then `cargo clippy`.
+- **Neovim:** `rustaceanvim` (LazyVim's `lang.rust` extra) auto-attaches once the binary is on PATH.
+
+#### Gotcha: "rust-analyzer not found" / infinite recursion
+
+`~/.cargo/bin/rust-analyzer` is a **rustup proxy** (symlink to `rustup`), not the real binary. If you skip `rustup component add rust-analyzer`, the proxy can't dispatch — it falls back to `/usr/bin/rust-analyzer` (often another proxy), bounces back and forth, and exits with `error: infinite recursion detected`. Your editor reports the LSP crashed.
+
+Fix is just to install the component:
+
+```bash
+rustup component add rust-analyzer
+rustup which rust-analyzer    # should now print a real path under ~/.rustup/toolchains/...
+rust-analyzer --version
+```
+
+Same trick (proxy → real binary) is used for `cargo`, `rustc`, `clippy`, `rustfmt`. They work out of the box because rustup installs them by default; `rust-analyzer` is opt-in.
 
 ---
 
@@ -67,6 +88,36 @@ hello_world/
 ```
 
 For a library: `cargo new mylib --lib` → `src/lib.rs`.
+
+### `.gitignore`
+
+`cargo new` generates a minimal one (`/target`). A reasonable expanded version:
+
+```gitignore
+# Rust build artifacts
+/target
+**/target
+
+# Backup files from older rustfmt
+**/*.rs.bk
+
+# Windows debug symbols
+*.pdb
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Env files
+.env
+.env.local
+```
+
+**`Cargo.lock` rule of thumb:**
+- **Binary / app:** commit it (reproducible builds).
+- **Library** (published to crates.io): don't commit it (downstream lockfiles win).
+- Unsure? You're probably writing a binary → commit it.
 
 ### Adding dependencies
 
@@ -381,9 +432,29 @@ fn longest<'a>(a: &'a str, b: &'a str) -> &'a str {
 
 ## 14. Workflow tips
 
-- Run `cargo check` constantly — way faster than `cargo build`.
+### Checking for errors from the CLI
+
+- `cargo check` — typecheck only, no codegen. Fastest feedback loop, run constantly.
+- `cargo build` — full compile.
+- `cargo clippy` — `cargo check` + extra lints. `cargo clippy -- -W clippy::pedantic` for stricter hints.
+- Watch mode (auto re-check on save):
+  ```bash
+  cargo install cargo-watch
+  cargo watch -x check
+  ```
+
+For a **single file** outside a cargo project:
+```bash
+rustc --edition 2021 main.rs                  # compiles to ./main
+rustc --edition 2021 --emit=metadata main.rs  # check only, no binary produced
+```
+
+> Note: `rust-analyzer` is **not** a CLI checker — it's an LSP server that speaks JSON-RPC to your editor. Running `rust-analyzer main.rs` just hangs. Use `cargo check` for CLI feedback; let your editor handle the LSP side.
+
+### Other tips
+
 - Read compiler errors carefully; they're famously good and often suggest the fix.
-- `cargo clippy -- -W clippy::pedantic` for stricter style hints.
+- `dbg!(x)` prints `x` with file/line — handy `printf`-debugging macro.
 - Tests live next to code:
   ```rust
   #[cfg(test)]
@@ -393,7 +464,6 @@ fn longest<'a>(a: &'a str, b: &'a str) -> &'a str {
       fn it_works() { assert_eq!(2 + 2, 4); }
   }
   ```
-- `dbg!(x)` prints `x` with file/line — handy `printf`-debugging macro.
 
 ---
 

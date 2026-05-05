@@ -1,0 +1,18 @@
+# Rust build artifacts
+/target
+**/target
+
+# Backup files from older rustfmt
+**/*.rs.bk
+
+# Windows debug symbols
+*.pdb
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Env files
+.env
+.env.local
