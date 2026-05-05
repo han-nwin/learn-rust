@@ -9,7 +9,7 @@ Personal cheat sheet while learning Rust. Covers setup → first program → cor
 ### Install (Linux/macOS/WSL)
 
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 source $HOME/.cargo/env
 ```
 
@@ -396,7 +396,7 @@ fn longest<'a>(a: &'a str, b: &'a str) -> &'a str {
 
 ## 15. Where to go next
 
-- The Book: <https://doc.rust-lang.org/book/>
+- The Book: <https://doc.rust-lang.org/stable/book/index.html>
 - Rust by Example: <https://doc.rust-lang.org/rust-by-example/>
 - Rustlings (exercises): <https://github.com/rust-lang/rustlings>
 - Std docs: <https://doc.rust-lang.org/std/>
