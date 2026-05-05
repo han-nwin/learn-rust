@@ -2,6 +2,9 @@
 
 Personal cheat sheet while learning Rust. Covers setup → first program → core language features through ownership/borrowing.
 
+
+- The Book: <https://doc.rust-lang.org/stable/book/index.html>
+- The Book Local: `./book/book/index.html`
 ---
 
 ## 1. Setup
