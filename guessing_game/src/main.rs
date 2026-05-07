@@ -27,17 +27,23 @@ fn main() {
             .expect("Failed to read line");
 
         // type conversion to unsigned 32-bit number
-        // Rust allows us to shadow the previous value of
-        // guess with a new one. Shadowing lets us reuse the guess variable
-        // name rather than forcing us to create two unique variables
-        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(e) => {
+                println!("{e}");
+                continue;
+            }
+        };
 
         println!("You guessed: {guess}");
 
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
-            Ordering::Equal => println!("You win!"),
             Ordering::Greater => println!("Too big"),
+            Ordering::Equal => {
+                println!("You win!");
+                break; //if correct get out of loop
+            }
         }
     }
 }
