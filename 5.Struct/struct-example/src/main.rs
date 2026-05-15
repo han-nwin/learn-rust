@@ -6,6 +6,16 @@ struct Rectangle {
     height: u64,
 }
 
+// Method
+// fn read(&self)       // Rust auto-borrows immutably
+// fn change(&mut self) // Rust auto-borrows mutably
+// fn take(self)        // Rust moves ownership
+impl Rectangle {
+    fn area(&self) -> u64 {
+        self.width * self.height
+    }
+}
+
 fn main() {
     let scale = 2;
     let rec = Rectangle {
@@ -28,6 +38,11 @@ fn main() {
     println!("u64 size (size of u64): {} bytes", size_of::<u64>());
 
     println!("area by reference: {}", area_ref(&rec));
+
+    println!("area by method: {}", rec.area());
+    //// area takes &self, so Rust automatically borrows rec as &rec.
+    // rec is not moved and still owns the Rectangle after this call.
+
     println!("area by value: {}", area_val(rec));
 }
 
