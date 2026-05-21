@@ -22,4 +22,14 @@ fn main() {
 
     let does_not_exist = &v[100]; // THIS WILL PANIC
     let does_not_exist = v.get(100); // THIS RETURNS NONE
+    //
+    //
+    let mut v = vec![1, 2, 3, 4, 5];
+
+    let first = &v[0];
+
+    v.push(6); // mem realloc happens here
+    // first variable (reference to the original vec) no longer valid
+
+    println!("The first element is: {first}");
 }
