@@ -48,4 +48,22 @@ fn main() {
         v[index] += 50;
         println!("{}", v[index]);
     }
-}
+
+    // Using enum to store multiple types
+    #[derive(Debug)]
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let mut row = vec![
+        SpreadsheetCell::Int(1),
+        SpreadsheetCell::Text(String::from("hello")),
+        SpreadsheetCell::Float(3.32134),
+    ];
+
+    for i in &row {
+        println!("{:?}", *i);
+    }
+} // All vec inside this {} goes out of scrope after this
