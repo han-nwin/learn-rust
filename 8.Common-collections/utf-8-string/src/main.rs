@@ -38,5 +38,18 @@ fn main() {
     let hello = String::from("Hola"); //length 4 here
     let hello = String::from("Здравствуйте"); // this is 24 in lenght, since each Unicode scalar
     // value takes 2 bytes
-    let answer = &hello[0];
+    // let answer = &hello[0];
+    //
+    // Slicing a string
+    let hello = "Здравствуйте";
+    let s5 = &hello[0..6];
+    println!("{s5}");
+
+    // Iterating Over Strings
+    for c in hello.chars() {
+        println!("{c}");
+    }
+    for c in hello.bytes() {
+        println!("{c}");
+    }
 }
