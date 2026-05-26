@@ -1,21 +1,42 @@
 fn main() {
-    // 1. Creating and displaying
-    let mut greeting = String::from("Hello");
-    greeting.push_str(", ");
-    println!("{}", greeting); // Hello,
+    // 2. Turn string literal to string type
+    let data = "initial dataaaa";
+    let s2 = data.to_string();
+    println!("{s2}");
 
-    // 2. Using string formatting
-    let name = "World";
-    let msg = format!("Hello, {}!", name);
+    // The method also works on a literal directly:
+    let s = "initial contents".to_string();
+    println!("{s}");
 
-    // 3. Converting UTF-8 data
-    let bytes = b"Hello";
-    let s = String::from_utf8(bytes.to_vec()).unwrap();
-    println!("{}", s);
+    // 1. Create an empty string
+    let mut s1 = String::new();
+    // append
+    s1.push_str(" brotherrrr");
+    println!("{s1}");
+    // append 1 char
+    s1.push('h');
+    println!("{s1}");
 
-    // 4. Accessing UTF-8 chars
-    let mut chars = "日本語".chars();
-    for ch in chars {
-        println!("{}", ch);
-    }
+    // Concatenating
+    let sa = String::from("Hello, ");
+    let sb = String::from("world!");
+    let sc = sa + &sb; // note sa has been moved here and can no longer be used
+    // the + operator use this method fn add(self, s: &str) -> String  under the hood
+    println!("{sc}");
+
+    let s1 = String::from("tic");
+    let s2 = String::from("tac");
+    let s3 = String::from("toe");
+
+    // let s = s1 + "-" + &s2 + "-" + &s3; // TOO long
+    //instead
+    let _ = format!("{s1}-{s2}-{s3}");
+    println!("{s}");
+
+    //Internal structure
+    // A String is a wrapper over a Vec<u8>
+    let hello = String::from("Hola"); //length 4 here
+    let hello = String::from("Здравствуйте"); // this is 24 in lenght, since each Unicode scalar
+    // value takes 2 bytes
+    let answer = &hello[0];
 }
