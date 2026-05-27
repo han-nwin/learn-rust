@@ -46,26 +46,32 @@ fn main() {
         });
 
     print_file_contents(&file);
-    write_to_file(&file, "I just rewrote this file!");
+    write_to_file(&file, "I just rewrote this file!").unwrap_or_else(|error| {
+        panic!("Error wrting file {error:?}");
+    });
     print_file_contents(&file);
     write_to_end_of_file(&file, "I just appended to this file!");
     print_file_contents(&file);
 
     //reset file
-    write_to_file(&file, "Hello World!");
+    write_to_file(&file, "Hello World!").unwrap_or_else(|error| {
+        panic!("Error wrting file {error:?}");
+    });
 }
 
 // delete content and write new content at beginning of file
-fn write_to_file(file: &File, text: &str) {
-    let mut file = file.try_clone().expect("Failed to clone the file handle");
-    file.set_len(0)
-        .expect("Failed to set the length of the file");
-    file.seek(SeekFrom::Start(0))
-        .expect("Failed to seek to the beginning of the file");
-    file.write_all(text.as_bytes())
-        .expect("Failed to write to the file");
+// ? here means we will let the error propagate to the caller and let them handle
+fn write_to_file(file: &File, text: &str) -> Result<(), io::Error> {
+    let mut file = file.try_clone()?;
+    file.set_len(0)?;
+    file.seek(SeekFrom::Start(0))?;
+    file.write_all(text.as_bytes())?;
+
+    Ok(())
 }
 
+// use expect only when we have more information the the compiler
+// which is not the case here but still use expect to demonstrate the syntax
 fn write_to_end_of_file(file: &File, text: &str) {
     let mut file = file.try_clone().expect("Failed to clone the file handle");
     file.seek(SeekFrom::End(0))
