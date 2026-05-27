@@ -1,3 +1,4 @@
+// 1. Function
 fn largest_i32(list: &[i32]) -> &i32 {
     let mut largest = &list[0];
 
@@ -38,6 +39,29 @@ fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
     largest
 }
 
+// 2. Struct
+struct Point<T> {
+    x: T,
+    y: T,
+} // x and y need to be the same type
+
+struct Point2<T, U> {
+    x: T,
+    y: U,
+} // x and y can be different type
+//
+
+// 3. Enum
+
+enum Option<T> {
+    Some(T),
+    None,
+}
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+
 fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
@@ -54,4 +78,8 @@ fn main() {
 
     let result = largest(&char_list);
     println!("the largest char is {result}");
+
+    let both_integer = Point { x: 5, y: 10 };
+    let both_float = Point { x: 1.0, y: 4.0 };
+    let integer_and_float = Point2 { x: 5, y: 4.0 };
 }
