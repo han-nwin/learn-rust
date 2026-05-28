@@ -52,7 +52,6 @@ struct Point2<T, U> {
 //
 
 // 3. Enum
-
 enum Option<T> {
     Some(T),
     None,
@@ -60,6 +59,37 @@ enum Option<T> {
 enum Result<T, E> {
     Ok(T),
     Err(E),
+}
+
+// IN method definition
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
+
+// Constraint on a concrete type
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+} // only f32 instances of T can use this function
+//
+
+struct Point3<X1, Y1> {
+    x: X1,
+    y: Y1,
+}
+// mix up
+// impl<X1, Y1> providing X1 Y1 to the scope
+impl<X1, Y1> Point3<X1, Y1> {
+    // mixup<X2, Y2> provide X2, Y2 to the scope
+    fn mixup<X2, Y2>(self, other: Point3<X2, Y2>) -> Point3<X1, Y2> {
+        Point3 {
+            x: self.x,
+            y: other.y,
+        }
+    }
 }
 
 fn main() {
@@ -82,4 +112,12 @@ fn main() {
     let both_integer = Point { x: 5, y: 10 };
     let both_float = Point { x: 1.0, y: 4.0 };
     let integer_and_float = Point2 { x: 5, y: 4.0 };
+
+    //mix up
+    let p1 = Point3 { x: 5, y: 10.4 };
+    let p2 = Point3 { x: "Hello", y: 'c' };
+
+    let p3 = p1.mixup(p2);
+
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
 }
