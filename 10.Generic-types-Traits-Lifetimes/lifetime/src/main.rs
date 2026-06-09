@@ -59,3 +59,48 @@ fn longest_2<'a>(x: &str, y: &str) -> &'a str {
     result.as_str()
 }
 // return lifetime doesn't know about y -> if y go out of scope it'll fail
+
+// Lifetime in Struct
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+// This annotation means an instance of
+// ImportantExcerpt can’t outlive the reference it holds in its part field.
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().unwrap();
+    let i = ImportantExcerpt {
+        part: first_sentence,
+    };
+}
+
+//Life time Elision
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+//OLD RUST would have
+fn first_word<'a>(s: &'a str) -> &'a str {}
+
+// In method definition
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_and_return_part(&self, announcement: &str) -> &str {
+        println!("Attention please: {announcement}");
+        self.part
+    }
+} // There are two input lifetimes, so Rust applies the first lifetime elision rule
+// and gives both &self and announcement their own lifetimes.
+// Then, because one of the parameters is &self, the return type gets the lifetime
+// of &self, and all lifetimes have been accounted for.
+
+// Static lifetime
+let s: &'static str = "I have a static lifetime."; // live the entire program
+
