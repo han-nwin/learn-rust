@@ -1,5 +1,6 @@
-pub fn search<'a>(query: &str, file_path: &'a str) -> Vec<&'a str> {
-    unimplemented!()
+pub fn search<'a>(query: &str, contents: String) -> Vec<&'a str> {
+    let n = vec!["2", "3", "4"];
+    n
 }
 
 #[cfg(test)]
@@ -8,6 +9,6 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = search("han", "poem.txt");
+        let result = search("han", String::from("poem.txt"));
     }
 }

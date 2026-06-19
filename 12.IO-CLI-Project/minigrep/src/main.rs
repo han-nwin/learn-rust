@@ -46,6 +46,10 @@ impl<'a> Config<'a> {
 // -> box put it on the heap and give us a pointer
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
-    println!("{}", contents);
+
+    for line in search(config.query, contents) {
+        println!("{line}");
+    }
+
     Ok(())
 }
