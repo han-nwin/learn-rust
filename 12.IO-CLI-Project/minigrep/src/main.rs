@@ -7,7 +7,7 @@ use std::process;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let config = Config::build(&args).unwrap_or_else(|err| {
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {err}"); // print to stderr
         process::exit(1);
     });
@@ -21,22 +21,30 @@ fn main() {
     }
 }
 
-struct Config<'a> {
-    query: &'a str,
-    file_path: &'a str,
+struct Config {
+    query: String,
+    file_path: String,
     ignore_case: bool,
 }
 
-impl<'a> Config<'a> {
+impl Config {
     //the returned Config contains string
     // slices borrowed from args, and it cannot outlive
     // args.
-    fn build(args: &'a [String]) -> Result<Config<'a>, &'static str> {
-        if args.len() < 3 {
-            return Err("Usage: minigrep <query> <file>");
-        }
-        let query = &args[1];
-        let file_path = &args[2];
+    // Use iterator for arg after learning Chapter 13
+    fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next();
+
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query String"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file path"),
+        };
+
         let ignore_case = env::var("IGNORE_CASE").is_ok(); // Check if this env var is set
 
         Ok(Config {
@@ -54,9 +62,9 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
 
     let results = if config.ignore_case {
-        search_case_insensitive(config.query, &contents)
+        search_case_insensitive(config.query.as_str(), &contents)
     } else {
-        search(config.query, &contents)
+        search(config.query.as_str(), &contents)
     };
 
     for line in results {
