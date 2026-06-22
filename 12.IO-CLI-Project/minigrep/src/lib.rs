@@ -1,33 +1,32 @@
 pub fn search(query: &str, contents: &str) -> Vec<String> {
     let mut results = vec![];
 
-    for line in contents.lines() {
-        if line.contains(query) {
-            // highlight the query text
-            // Pattern:
-            // "\x1b[31mred text\x1b[0m"
-            // Means:
-            // \x1b[   start ANSI escape
-            // 0   reset
-            // 1   bold
-            // 3   italic
-            // 4   underline
-            // 40-47   background color
-            // 100-107 bright background color
-            // 30-37   foreground color
-            // m       apply style
-            // text    printed text
-            // \x1b[0m reset everything
+    // highlight the query text
+    // Pattern:
+    // "\x1b[31mred text\x1b[0m"
+    // Means:
+    // \x1b[   start ANSI escape
+    // 0   reset
+    // 1   bold
+    // 3   italic
+    // 4   underline
+    // 40-47   background color
+    // 100-107 bright background color
+    // 30-37   foreground color
+    // m       apply style
+    // text    printed text
+    // \x1b[0m reset everything
 
-            //  You can combine codes with ;:
-            // "\x1b[1;31mbold red\x1b[0m"
-            // "\x1b[4;32munderlined green\x1b[0m"
-            // "\x1b[30;43mblack text on yellow background\x1b[0m"
-            let highlited_line = line.replace(query, &format!("\x1b[1;31m{query}\x1b[0m"));
+    //  You can combine codes with ;:
+    // "\x1b[1;31mbold red\x1b[0m"
+    // "\x1b[4;32munderlined green\x1b[0m"
+    // "\x1b[30;43mblack text on yellow background\x1b[0m"
 
-            results.push(highlited_line);
-        }
-    }
+    results = contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .map(|selected_line| selected_line.replace(query, &format!("\x1b[1;31m{query}\x1b[0m")))
+        .collect();
 
     results
 }
@@ -72,7 +71,7 @@ mod tests {
             for text_to_highlight in &texts_to_highlight {
                 highlighted_line = highlighted_line.replace(
                     text_to_highlight,
-                    &format!("\x1b[1;47;31m{text_to_highlight}\x1b[0m"),
+                    &format!("\x1b[1;31m{text_to_highlight}\x1b[0m"),
                 );
             }
 
