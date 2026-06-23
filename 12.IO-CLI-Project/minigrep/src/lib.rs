@@ -32,28 +32,45 @@ pub fn search(query: &str, contents: &str) -> Vec<String> {
 }
 
 pub fn search_case_insensitive(query: &str, contents: &str) -> Vec<String> {
-    let mut results = vec![];
+    // rewrite in iterator style
+    let results = contents
+        .lines()
+        // this return Option<String>
+        .filter_map(|line| {
+            if let Some(index) = line.to_lowercase().find(&query.to_lowercase()) {
+                let end = index + query.len();
+                let text_to_highlight = line[index..end].to_string();
 
-    for line in contents.lines() {
-        let lower_line = line.to_lowercase();
-        let lower_query = query.to_lowercase();
+                Some(line.replace(
+                    &text_to_highlight,
+                    &format!("\x1b[1;31m{text_to_highlight}\x1b[0m"),
+                ))
+            } else {
+                None
+            }
+        })
+        .collect();
 
-        // .find return index: Option<usize>
-        // It might be:
-        // Some(0)
-        // Some(5)
-        // None
-        if let Some(index) = lower_line.find(&lower_query) {
-            let end = index + query.len();
-
-            let text_to_highlight = line[index..end].to_string();
-            let highlited_line = line.replace(
-                &text_to_highlight,
-                &format!("\x1b[1;31m{text_to_highlight}\x1b[0m"),
-            );
-            results.push(highlited_line);
-        }
-    }
+    // for line in contents.lines() {
+    //     let lower_line = line.to_lowercase();
+    //     let lower_query = query.to_lowercase();
+    //
+    //     // .find return index: Option<usize>
+    //     // It might be:
+    //     // Some(0)
+    //     // Some(5)
+    //     // None
+    //     if let Some(index) = lower_line.find(&lower_query) {
+    //         let end = index + query.len();
+    //
+    //         let text_to_highlight = line[index..end].to_string();
+    //         let highlighted_line = line.replace(
+    //             &text_to_highlight,
+    //             &format!("\x1b[1;31m{text_to_highlight}\x1b[0m"),
+    //         );
+    //         results.push(highlighted_line);
+    //     }
+    // }
 
     results
 }
