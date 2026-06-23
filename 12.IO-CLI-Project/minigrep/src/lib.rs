@@ -67,7 +67,10 @@ mod tests {
         for line in contents {
             let mut highlighted_line = line.to_string();
 
-            // defef the texts_to_highlight
+            // into_iter() called here
+            // loop over the reference instead because of the outer loop
+            // we don't wanna move every iter
+            // loop over the slice
             for text_to_highlight in &texts_to_highlight {
                 highlighted_line = highlighted_line.replace(
                     text_to_highlight,
