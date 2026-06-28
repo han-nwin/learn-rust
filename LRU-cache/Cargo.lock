@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "LRU-cache"
+name = "lru_cache"
 version = "0.1.0"
