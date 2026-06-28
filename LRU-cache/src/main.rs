@@ -1,4 +1,4 @@
-use std::cell::{Ref, RefCell};
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -20,7 +20,9 @@ struct LRUCache {
 impl LRUCache {
     fn new(capacity: i32) -> LRUCache {
         // not allow capacity <= 0
-        eprintln!("Capacity has to be greater than 0");
+        if capacity <= 0 {
+            eprintln!("Capacity has to be greater than 0");
+        }
         assert!(capacity > 0);
 
         let map = HashMap::new();
