@@ -1,4 +1,5 @@
-use std::sync::Mutex;
+use std::rc::Rc;
+use std::sync::{Arc, Mutex}; // Arc = Atomic Rc = Atomic reference-counted
 use std::thread;
 
 fn main() {
@@ -12,12 +13,14 @@ fn main() {
     println!("m = {m:?}");
 
     // === Multi threads with mutex === //
-    let counter = Mutex::new(0);
+    let counter = Arc::new(Mutex::new(0)); // Atomic reference-counted to the Mutex<T>
     let mut handles = vec![];
 
     for _ in 0..10 {
+        let cnt = Arc::clone(&counter); // create a clone before sending it to thread
+
         let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
+            let mut num = cnt.lock().unwrap();
             *num += 1; //defef here since mutex inplement DeRef trait
         });
         handles.push(handle);
@@ -28,3 +31,7 @@ fn main() {
     }
     println!("Result: {}", *counter.lock().unwrap());
 }
+
+// NOTE:
+// So if normal Rc<RefCell<>> can cause mem leaks with reference cycles
+// Arc<Mutex>> can cause deadlocks with reference cycles
