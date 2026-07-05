@@ -36,6 +36,7 @@ pub fn search_case_insensitive(query: &str, contents: &str) -> Vec<String> {
     let results = contents
         .lines()
         // this return Option<String>
+        // filter_map won't return things that have None values
         .filter_map(|line| {
             if let Some(index) = line.to_lowercase().find(&query.to_lowercase()) {
                 let end = index + query.len();
