@@ -1,5 +1,5 @@
 [package]
-name = "rayon_tokio_comparision"
+name = "rayon_tokio_webpage_word_count"
 version = "0.1.0"
 edition = "2024"
 
