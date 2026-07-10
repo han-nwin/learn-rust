@@ -140,7 +140,9 @@ pub mod gui {
         }
     }
 
-    // Extend existing type
+    // NOTE: Extend existing type
+    // We can't do this in main because Draw and String are not local to main crate
+    // one of them must be local, in lib.rs Draw is local so this is good
     impl Draw for String {
         fn draw(&self) {
             println!("{}", self);
