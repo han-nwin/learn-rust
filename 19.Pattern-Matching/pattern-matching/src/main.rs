@@ -53,6 +53,11 @@ fn main() {
         println!("{value} is at index {index}");
     }
 
+    // refutable patern
+    let Some(x) = some_option_value else {
+        return;
+    };
+
     let point = (3, 5);
     print_coordinates(&point);
 }
