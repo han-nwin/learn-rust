@@ -5,6 +5,13 @@ Personal cheat sheet while learning Rust. Covers setup → first program → cor
 
 - The Book: <https://doc.rust-lang.org/stable/book/index.html>
 - The Book Local: `./book/book/index.html`
+- Rust Documentations List: `rustup doc`
+
+## Advanced
+- The Rust Reference: <https://doc.rust-lang.org/stable/reference/introduction.html>
+- Rust by Example: <https://doc.rust-lang.org/rust-by-example/>
+- Rustlings (exercises): <https://github.com/rust-lang/rustlings>
+- Std docs: <https://doc.rust-lang.org/std/>
 ---
 
 ## 1. Setup
@@ -466,10 +473,11 @@ rustc --edition 2021 --emit=metadata main.rs  # check only, no binary produced
   ```
 
 ---
-
-## 15. Where to go next
+ ## 15. Unsafe Rust
+```bash
+rustup +nightly component add miri
+cargo +nightly miri run
+cargo +nightly miri test
+```
 
 - The Book: <https://doc.rust-lang.org/stable/book/index.html>
-- Rust by Example: <https://doc.rust-lang.org/rust-by-example/>
-- Rustlings (exercises): <https://github.com/rust-lang/rustlings>
-- Std docs: <https://doc.rust-lang.org/std/>
