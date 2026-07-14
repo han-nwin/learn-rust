@@ -3,18 +3,6 @@
 version = 4
 
 [[package]]
-name = "hello_macro"
-version = "0.1.0"
-
-[[package]]
-name = "hello_macro_derive"
-version = "0.1.0"
-dependencies = [
- "quote",
- "syn",
-]
-
-[[package]]
 name = "proc-macro2"
 version = "1.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -30,24 +18,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dfbc457d0c7a0759a614551b11a6409e5951f6c7537be1f1b7682b9ae9230368"
 dependencies = [
  "proc-macro2",
-]
-
-[[package]]
-name = "route_macro"
-version = "0.1.0"
-dependencies = [
- "quote",
- "syn",
-]
-
-[[package]]
-name = "rust-macro"
-version = "0.1.0"
-dependencies = [
- "hello_macro",
- "hello_macro_derive",
- "route_macro",
- "useful_macros",
 ]
 
 [[package]]

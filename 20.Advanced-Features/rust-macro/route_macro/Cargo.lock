@@ -3,18 +3,6 @@
 version = 4
 
 [[package]]
-name = "hello_macro"
-version = "0.1.0"
-
-[[package]]
-name = "hello_macro_derive"
-version = "0.1.0"
-dependencies = [
- "quote",
- "syn",
-]
-
-[[package]]
 name = "proc-macro2"
 version = "1.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -41,16 +29,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-macro"
-version = "0.1.0"
-dependencies = [
- "hello_macro",
- "hello_macro_derive",
- "route_macro",
- "useful_macros",
-]
-
-[[package]]
 name = "syn"
 version = "2.0.118"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -66,12 +44,3 @@ name = "unicode-ident"
 version = "1.0.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
-
-[[package]]
-name = "useful_macros"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
