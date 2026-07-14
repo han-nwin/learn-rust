@@ -98,6 +98,23 @@ impl Wizard for Human {
     }
 }
 
+struct Airplane;
+
+impl Pilot for Airplane {
+    fn fly(&self) {
+        println!("The airplane is taking off.");
+    }
+}
+
+// NOTE: Trait object ==//
+// A trait object lets different concrete types share one collection.
+// Without `dyn Pilot`, a Vec must contain values of one concrete type.
+fn fly_everything(pilots: &[Box<dyn Pilot>]) {
+    for pilot in pilots {
+        pilot.fly(); // dynamically calls the implementation for Human or Airplane
+    }
+}
+
 impl Human {
     fn fly(&self) {
         println!("*waving arms furiously*");
@@ -177,6 +194,12 @@ fn main() {
     Pilot::fly(&human);
     Wizard::fly(&human);
     human.fly();
+
+    // NOTE: Trait object usage
+    // Human and Airplane are different types, but both implement Pilot.
+    // `Box<dyn Pilot>` hides their concrete types behind the shared behavior.
+    let pilots: Vec<Box<dyn Pilot>> = vec![Box::new(Human), Box::new(Airplane)];
+    fly_everything(&pilots);
 
     println!("Dog struct baby_name print {}", Dog::baby_name());
     // NOTE: Use fully qualified syntax
