@@ -1,3 +1,32 @@
+//NOTE:
+// Pin is a wrapper for pointer-like types such as &, &mut,
+// Box, and Rc. (Technically, Pin works with types that implement the
+// Deref or DerefMut traits, but this is effectively equivalent to working only with references
+// and smart pointers.) Pin is not a pointer itself and doesn’t have
+// any behavior of its own like Rc and Arc do with reference counting; it’s
+// purely a tool the compiler can use to enforce constraints on pointer usage.
+//
+// NOTE:
+// When we move a future—whether by pushing it into a data structure to
+// use as an iterator with join_all or by returning it from a function—that
+// actually means moving the state machine Rust creates for us. And unlike most other
+// types in Rust, the futures Rust creates for async blocks can end up with
+// references to themselves in the fields of any given variant,
+//
+// NOTE:
+// Theoretically, the Rust compiler could try to update every reference to an object whenever
+// it gets moved, but that could add a lot of performance overhead, especially
+// if a whole web of references needs updating. If we could instead make sure
+// the data structure in question doesn’t move in memory, we wouldn’
+// t have to update any references. This is exactly what Rust’s borrow
+// checker is for: in safe code, it prevents you from moving any item with an active reference to it.
+
+// NOTE:
+// Pin builds on that to give us the exact guarantee we need. When we
+// pin a value by wrapping a pointer to that value in Pin, it can
+// no longer move. Thus, if you have Pin<Box<SomeType>>,
+// you actually pin the SomeType value, not the Box pointer.
+
 use std::pin::{Pin, pin};
 use std::time::Duration;
 
